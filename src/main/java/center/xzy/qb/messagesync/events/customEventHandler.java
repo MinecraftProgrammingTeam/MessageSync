@@ -11,7 +11,9 @@ import center.xzy.qb.messagesync.Main;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -44,7 +46,20 @@ public class customEventHandler implements Listener {
         sendRequest(event.getDeathMessage());
     }
 
+    public String regReplace(String content,String pattern,String newString){
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(content);
+        return m.replaceAll(newString);
+    }
+
     public void sendRequest(String msg) {
+        String pattern1 = "§[a-z][0-9]";
+        String pattern2 = "&[a-z][0-9]";
+        if (Pattern.matches(pattern1, msg)){
+            msg = regReplace(msg, pattern1, "");
+        } else if (Pattern.matches(pattern2, msg)){
+            msg = regReplace(msg, pattern2, "");
+        }
         // 首先抓取异常并处理
         String returnString = "1";
         try{
@@ -73,7 +88,7 @@ public class customEventHandler implements Listener {
             // 6 输出打印获取到的文件流
             String str = "";
             while ((str = isRead.readLine()) != null) {
-                str = new String(str.getBytes(),"UTF-8"); //解决中文乱码问题
+                str = new String(str.getBytes(), "UTF-8"); //解决中文乱码问题
 //          System.out.println("文件解析打印：");
 //          System.out.println(str);
                 returnString = str;
