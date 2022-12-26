@@ -54,14 +54,10 @@ public class customEventHandler implements Listener {
 
     public void sendRequest(String msg) {
         // 去除颜色代码
-        String pattern1 = "§[a-z][0-9]?";
-        String pattern2 = "&[a-z][0-9]?";
-        Pattern pattern = Pattern.compile(pattern1);
-        Matcher matcher = pattern.matcher(msg);
-        msg = matcher.replaceAll("");
-        pattern = Pattern.compile(pattern2);
-        matcher = pattern.matcher(msg);
-        msg = matcher.replaceAll("");
+        String pattern1 = "§[a-z0-9]?";
+        String pattern2 = "&[a-z0-9]?";
+        msg = regReplace(msg, pattern1, "");
+        msg = regReplace(msg, pattern2, "");
 
         // 首先抓取异常并处理
         String returnString = "1";
