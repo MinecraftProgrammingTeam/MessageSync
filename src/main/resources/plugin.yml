@@ -1,7 +1,7 @@
 name: MessageSync
 version: '${project.version}'
 main: center.xzy.qb.messagesync.Main
-api-version: 1.19
+api-version: 1.13
 authors: [xzyStudio]
 description: Message Sync Plugin for PigBotFramework
 website: https://qb.xzy.center
