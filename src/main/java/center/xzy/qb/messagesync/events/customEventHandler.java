@@ -53,13 +53,16 @@ public class customEventHandler implements Listener {
     }
 
     public void sendRequest(String msg) {
-        String pattern1 = "§[a-z][0-9]";
-        String pattern2 = "&[a-z][0-9]";
-        if (Pattern.matches(pattern1, msg)){
-            msg = regReplace(msg, pattern1, "");
-        } else if (Pattern.matches(pattern2, msg)){
-            msg = regReplace(msg, pattern2, "");
-        }
+        // 去除颜色代码
+        String pattern1 = "§[a-z][0-9]?";
+        String pattern2 = "&[a-z][0-9]?";
+        Pattern pattern = Pattern.compile(pattern1);
+        Matcher matcher = pattern.matcher(msg);
+        msg = matcher.replaceAll("");
+        pattern = Pattern.compile(pattern2);
+        matcher = pattern.matcher(msg);
+        msg = matcher.replaceAll("");
+
         // 首先抓取异常并处理
         String returnString = "1";
         try{
