@@ -88,7 +88,7 @@ public class customEventHandler implements Listener {
             // 6 输出打印获取到的文件流
             String str = "";
             while ((str = isRead.readLine()) != null) {
-            str = new String(str.getBytes(), "UTF-8"); //解决中文乱码问题
+                str = new String(str.getBytes(), "UTF-8"); //解决中文乱码问题
 //          System.out.println("文件解析打印：");
 //          System.out.println(str);
                 returnString = str;
