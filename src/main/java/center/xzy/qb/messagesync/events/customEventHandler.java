@@ -65,13 +65,14 @@ public class customEventHandler implements Listener {
             // 拼接url
             Integer qn = plugin.getConfig().getInt("qn");
             String uuid = plugin.getConfig().getString("uuid");
-            String urlP = "https://qqbot.xzy.center/1000/MCServer?msg="+URLEncoder.encode(msg, "UTF-8")+"&qn="+qn+"&uuid="+uuid;
+            String urlP = plugin.getConfig().getString("url") + "/MCServer?msg="+URLEncoder.encode(msg, "UTF-8")+"&qn="+qn+"&uuid="+uuid;
 
             // 1  创建URL对象,接收用户传递访问地址对象链接
             URL url = new URL(urlP);
 
             // 2 打开用户传递URL参数地址
             HttpURLConnection connect = (HttpURLConnection) url.openConnection();
+            connect.setRequestProperty("User-agent", "	Mozilla/5.0 (Windows NT 6.1; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0");
 
             // 3 设置HTTP请求的一些参数信息
             connect.setRequestMethod("GET"); // 参数必须大写
