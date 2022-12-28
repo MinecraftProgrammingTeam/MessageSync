@@ -1,6 +1,5 @@
 package center.xzy.qb.messagesync;
 
-import center.xzy.qb.messagesync.commands.impl.enable;
 import center.xzy.qb.messagesync.executor.CommandHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.ChatColor;
