@@ -66,7 +66,7 @@ public class customEventHandler implements Listener {
                 // 拼接url
                 Integer qn = plugin.getConfig().getInt("qn");
                 String uuid = plugin.getConfig().getString("uuid");
-                String urlP = plugin.getConfig().getString("url") + "/MCServer?msg=" + URLEncoder.encode(msg, "UTF-8") + "&qn=" + qn + "&uuid=" + uuid;
+                String urlP = plugin.getConfig().getString("message-report-url") + "/MCServer?msg=" + URLEncoder.encode(msg, "UTF-8") + "&qn=" + qn + "&uuid=" + uuid;
 
                 // 1  创建URL对象,接收用户传递访问地址对象链接
                 URL url = new URL(urlP);

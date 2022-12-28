@@ -7,7 +7,7 @@ import center.xzy.qb.messagesync.commands.ICommand;
 
 public class disable extends ICommand {
     public disable(){
-        super("disable", "", "启用插件");
+        super("disable", "", "禁用插件");
     }
 
     public boolean onCommand(CommandSender sender, String[] args) {

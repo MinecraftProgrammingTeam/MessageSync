@@ -1,9 +1,10 @@
 package center.xzy.qb.messagesync;
 
-import center.xzy.qb.messagesync.executor.CommandHandler;
+import center.xzy.qb.messagesync.executor.*;
+import center.xzy.qb.messagesync.commands.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.ChatColor;
-import center.xzy.qb.messagesync.events.customEventHandler;
+import center.xzy.qb.messagesync.events.*;
 import org.bukkit.plugin.Plugin;
 
 public final class Main extends JavaPlugin {
@@ -22,6 +23,7 @@ public final class Main extends JavaPlugin {
 
         // reg commands
         getCommand("ms").setExecutor(new CommandHandler());
+        getCommand("say").setExecutor(new sayHandler());
 
         // check config
         int qn = plugin.getConfig().getInt("qn");

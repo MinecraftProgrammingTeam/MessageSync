@@ -8,7 +8,10 @@ website: https://qb.xzy.center
 commands:
   ms:
     description: MessageSync消息同步相关指令
-    usage: /ms help
+    usage: /ms
+  say:
+    description: 发送消息
+    usage: /say <MessageContent>
 permissions:
   messagesync.*:
     description: Allows ms command
