@@ -13,3 +13,15 @@
 其中：
 - `qn`：要将消息同步到的群号
 - `uuid`：机器人UUID
+
+# 开发
+- 日志  
+  引入主类`import center.xzy.qb.messagesync.Main;`，然后使用`Main.instance.getLogger()`就可以获取到`logger`
+- `event`事件监听  
+  位于`center.xzy.qb.messagesync.event`包，`customEventHandler`是消息上报的监听器类，所有`event`操作都应该在`event`包中，在主类中定义监听器
+- `commands`指令  
+  位于`center.xzy.qb.messagesync.commands.impl`包中。
+  - 创建指令：每一个指令都是一个类，继承自`commands`包中的`ICommand`，需要调用`super(插件名, 参数, 描述)`方法初始化插件
+  - 注册指令：在`executor.CommandHandler`中的`initHandler`方法中添加`registerCommand(new 指令类名());`即可
+  - 指令使用：在指令类的`onCommand(CommandSender sender, String[] args)`方法中写具体逻辑，在`permission`方法返回使用指令的权限组
+  - 好处：使用`/ms 指令名[ 参数]`即可使用指令，有TAB自动补全
