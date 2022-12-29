@@ -32,83 +32,94 @@ public class customEventHandler implements Listener {
     }
 
     @EventHandler
+    public void PlayerPreLogin(AsyncPlayerPreLoginEvent event) {
+        if (Main.regIpData.containsKey(event.getName())){
+            Main.regIpData.replace(event.getName(), event.getAddress().toString());
+        } else {
+            Main.regIpData.put(event.getName(), event.getAddress().toString());
+        }
+    }
+
+    @EventHandler
     public void PlayerLogin(PlayerJoinEvent event) {
 //        String Message = "玩家<" + event.getName() + ">已从" + event.getAddress() + "登录服务器";
         sendRequest(event.getJoinMessage());
 
-        Inventory inv = Bukkit.createInventory(null, InventoryType.CHEST , ChatColor.GREEN + "欢迎来到" + plugin.getConfig().getString("server-name") + "服务器 " + ChatColor.BLUE + "请登录");
+        if (plugin.getConfig().getBoolean("login-verify")) {
+            Inventory inv = Bukkit.createInventory(null, InventoryType.CHEST, ChatColor.GREEN + "欢迎来到" + plugin.getConfig().getString("server-name") + "服务器 " + ChatColor.BLUE + "请登录");
 
-        inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码1"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "1"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "2"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "2"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "3"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "3"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "3"));
-        inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码2"));
-        inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码3"));
-        inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码7"));
-        inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码4"));
-        inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码5"));
+            inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码1"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "1"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "2"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "2"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "3"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "3"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "3"));
+            inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码2"));
+            inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码3"));
+            inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码7"));
+            inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码4"));
+            inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码5"));
 
-        inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码6"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "4"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "4"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "4"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "4"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "5"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "5"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "5"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "5"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "5"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "0"));
-        inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码8"));
-        inv.addItem(Main.NewItem(Material.GREEN_STAINED_GLASS, "确认"));
-        inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码9"));
-        inv.addItem(Main.NewItem(Material.RED_STAINED_GLASS, "清空"));
+            inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码6"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "4"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "4"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "4"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "4"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "5"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "5"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "5"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "5"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "5"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "0"));
+            inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码8"));
+            inv.addItem(Main.NewItem(Material.GREEN_STAINED_GLASS, "确认"));
+            inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码9"));
+            inv.addItem(Main.NewItem(Material.RED_STAINED_GLASS, "清空"));
 
-        inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码11"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
-        inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码12"));
-        inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码13"));
-        inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码10"));
-        inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码14"));
-        inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码15"));
+            inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码11"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
+            inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
+            inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码12"));
+            inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码13"));
+            inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码10"));
+            inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码14"));
+            inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码15"));
 
-        Player p = event.getPlayer();
-        p.closeInventory();
-        p.openInventory(inv);
+            Player p = event.getPlayer();
+            p.closeInventory();
+            p.openInventory(inv);
 
-        Main.LoginData.put(p.getName(), new ArrayList<>());
+            Main.LoginData.put(p.getName(), new ArrayList<>());
+        }
     }
 
     @EventHandler

@@ -31,6 +31,11 @@ public class inventoryEventHandler implements Listener {
         pdMap.put(13, 0);
     }
 
+    private void cleanData(Player p) {
+        Main.LoginData.remove(p.getName());
+        Main.regData.remove(p.getName());
+    }
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) throws SQLException {
         if (event.getWhoClicked() instanceof Player == false) { return;}
@@ -40,8 +45,6 @@ public class inventoryEventHandler implements Listener {
             switch (event.getRawSlot()){
                 case 15:
                     // 确认
-                    Main.instance.getLogger().info(LoginData.toString());
-
                     Statement statement = Main.dbConn.createStatement();
                     ResultSet rs = statement.executeQuery("select * from `password` where `id`='" + p.getName() + "'");
                     boolean flag = false;
@@ -53,23 +56,55 @@ public class inventoryEventHandler implements Listener {
                     }
                     if (!flag) {
                         // 注册
-                        Date date = new Date();
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                        String dateString = sdf.format(date);
-                        statement.executeUpdate("insert into password values('" + p.getName() + "', '" + password + "', '" + dateString + "')");
-                        p.closeInventory();
-                        p.sendMessage(ChatColor.GREEN + "注册成功！");
+                        if (Main.regData.containsKey(p.getName())) {
+                            List<String> regData = Main.regData.get(p.getName());
+                            String repeatPassword = StringUtils.join(regData, "");
+                            if (repeatPassword.equals(password)) {
+                                String ip = null;
+                                if (Main.regIpData.containsKey(p.getName())) {
+                                    ip = Main.regIpData.get(p.getName());
+                                } else {
+                                    p.kickPlayer("没有ID的PreLogin数据，请重试！");
+                                    return ;
+                                }
+
+                                rs = statement.executeQuery("select * from `password` where `ip`='" + ip + "'");
+                                int ipCount = 0;
+                                while(rs.next()) {
+                                    ipCount++;
+                                }
+
+                                if (ipCount >= plugin.getConfig().getInt("reg-ip-count") && plugin.getConfig().getInt("reg-ip-count") != 0) {
+                                    p.kickPlayer(plugin.getConfig().getString("reg-ip-max-fail-msg"));
+                                    return ;
+                                }
+
+                                // 写入数据库
+                                Date date = new Date();
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                                String dateString = sdf.format(date);
+                                statement.executeUpdate("insert into password values('" + p.getName() + "', '" + Main.MD5(password) + "', '" + dateString + "', '" + ip + "')");
+                                p.closeInventory();
+                                cleanData(p);
+                                p.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("reg-success-msg"));
+                            } else {
+                                cleanData(p);
+                                p.kickPlayer(ChatColor.RED + "重复密码与密码不一致，请重试！");
+                            }
+                        } else {
+                            Main.regData.put(p.getName(), new ArrayList<>());
+                        }
                     } else {
-                        Main.instance.getLogger().info(password);
-                        Main.instance.getLogger().info(currentPassword);
-                        if (password.equals(currentPassword)) {
+                        if (Main.MD5(password).equals(currentPassword)) {
                             // 登录成功
                             p.closeInventory();
-                            p.sendMessage(ChatColor.GREEN + "登陆成功！");
+                            cleanData(p);
+                            p.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("login-success-msg"));
                         } else {
                             // 密码错误
                             p.closeInventory();
-                            p.kickPlayer(ChatColor.RED + "密码错误！");
+                            cleanData(p);
+                            p.kickPlayer(ChatColor.RED + plugin.getConfig().getString("login-fail-msg"));
                         }
                     }
                     break;
@@ -78,9 +113,16 @@ public class inventoryEventHandler implements Listener {
                     Main.LoginData.replace(p.getName(), new ArrayList<>());
                     break;
                 default:
+                    // 输入数字
                     Integer slot = pdMap.get(event.getRawSlot());
-                    LoginData.add(String.valueOf(slot));
-                    Main.LoginData.replace(p.getName(), LoginData);
+                    if (Main.regData.containsKey(p.getName())) {
+                        List<String> regData = Main.regData.get(p.getName());
+                        regData.add(String.valueOf(slot));
+                        Main.regData.replace(p.getName(), regData);
+                    } else {
+                        LoginData.add(String.valueOf(slot));
+                        Main.LoginData.replace(p.getName(), LoginData);
+                    }
                     break;
             }
             event.setCancelled(true);

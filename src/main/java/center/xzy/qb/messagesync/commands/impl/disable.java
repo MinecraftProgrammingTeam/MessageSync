@@ -18,6 +18,6 @@ public class disable extends ICommand {
 }
 
     public String permission(){
-        return "messagesync.disable";
+        return "messagesync.ms.disable";
     }
 }

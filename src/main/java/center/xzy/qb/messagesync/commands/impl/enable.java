@@ -19,6 +19,6 @@ public class enable extends ICommand {
     }
 
     public String permission(){
-        return "messagesync.enable";
+        return "messagesync.ms.enable";
     }
 }
