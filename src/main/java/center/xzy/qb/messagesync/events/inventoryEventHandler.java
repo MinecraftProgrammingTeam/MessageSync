@@ -114,6 +114,9 @@ public class inventoryEventHandler implements Listener {
                     break;
                 default:
                     // 输入数字
+                    if (!pdMap.containsKey(event.getRawSlot())){
+                        return ;
+                    }
                     Integer slot = pdMap.get(event.getRawSlot());
                     if (Main.regData.containsKey(p.getName())) {
                         List<String> regData = Main.regData.get(p.getName());

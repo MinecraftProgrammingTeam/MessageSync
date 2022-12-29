@@ -74,7 +74,7 @@ public final class Main extends JavaPlugin {
 
     public static void initDatabase(Connection conn) throws SQLException {
         Statement statement = conn.createStatement();
-        statement.executeUpdate("create table if not exists `password`(`id` string, `password` string, `time` string, `ip` string)");
+        statement.executeUpdate("create table if not exists `password`(`id` string PRIMARY KEY, `password` string, `time` string, `ip` string)");
     }
 
     public static ItemStack NewItem(Material type, String DisplayName, List<String> Lores){
