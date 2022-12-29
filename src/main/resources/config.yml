@@ -2,3 +2,5 @@ qn: 0
 uuid: ""
 message-report-url: "https://qqbot.xzy.center/1000"
 say-prefix: "[Q群消息]"
+login-verify: true
+server-name: "Aurora Field"

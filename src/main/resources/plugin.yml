@@ -13,6 +13,6 @@ commands:
     description: 发送消息
     usage: /say <MessageContent>
 permissions:
-  messagesync.*:
+  messagesync.ms.*:
     description: Allows ms command
     default: op

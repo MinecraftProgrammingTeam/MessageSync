@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.reflections.Reflections;
 
 import java.util.*;
 
@@ -42,6 +43,18 @@ public class CommandHandler implements TabExecutor {
      * 注意要使用小写，与发送者的指令进行匹配
      */
     private void initHandler() {
+//        Reflections reflections = new Reflections("center.xzy.qb.messagesync.commands.impl");
+//        Set<Class<? extends ICommand>> subTypesOf = reflections.getSubTypesOf(ICommand.class);
+////        Main.instance.getLogger().warning(subTypesOf.toArray().toString());
+//        subTypesOf.forEach(aClass -> {
+//            try {
+//                ICommand command = aClass.newInstance();
+//                registerCommand(command);
+//            } catch (InstantiationException | IllegalAccessException e) {
+//                throw new RuntimeException(e);
+//            }
+//        });
+
         registerCommand(new enable());
         registerCommand(new disable());
     }

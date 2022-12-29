@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.entity.Player;
 
 public class sayHandler implements CommandExecutor {
     Plugin plugin = Main.getPlugin(Main.class);
@@ -17,7 +18,11 @@ public class sayHandler implements CommandExecutor {
         for (int i = 0; i < args.length; i++) {
             msg += args[i] +" ";
         }
-        Bukkit.broadcastMessage(plugin.getConfig().getString("say-prefix") + " " + msg);
+        if (sender instanceof Player){
+            Bukkit.broadcastMessage("<" + sender.getName() + "> " + msg);
+        }else {
+            Bukkit.broadcastMessage(plugin.getConfig().getString("say-prefix") + " " + msg);
+        }
         return true;
     }
 }
