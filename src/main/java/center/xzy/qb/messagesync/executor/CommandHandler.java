@@ -58,6 +58,7 @@ public class CommandHandler implements TabExecutor {
         registerCommand(new disable());
         registerCommand(new user());
         registerCommand(new login());
+        registerCommand(new reload());
     }
 
     /**

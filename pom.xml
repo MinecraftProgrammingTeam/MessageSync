@@ -6,7 +6,7 @@
 
     <groupId>center.xzy.qb</groupId>
     <artifactId>MessageSync</artifactId>
-    <version>1.7-SNAPSHOT</version>
+    <version>1.8-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>MessageSync</name>
