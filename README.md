@@ -18,7 +18,7 @@
 可能会与以下插件发生冲突：
 - 其他的登录插件例如`AuthMe`
 - `SkinsRestorer`
-- `TitleManager-2.3.1`
+- `TitleManager-2.3.1` 预计加入TitleManager以实现并替代tm的功能
 
 # 开发
 - 日志  
@@ -31,3 +31,8 @@
   - 注册指令：在`executor.CommandHandler`中的`initHandler`方法中添加`registerCommand(new 指令类名());`即可
   - 指令使用：在指令类的`onCommand(CommandSender sender, String[] args)`方法中写具体逻辑，在`permission`方法返回使用指令的权限组
   - 好处：使用`/ms 指令名[ 参数]`即可使用指令，有TAB自动补全
+- `scheduler`定时任务
+  位于`center.xzy.qb.messagesync.scheduler`
+- `sqlite`数据库
+  直接调用`Main.dbConn`就能获得数据库连接，使用`Main.dbConn.createStatement()`创建`Statement`对象。  
+  您无需`dbConn.close()`，因为插件`onDisable`时会自动关闭数据库连接
