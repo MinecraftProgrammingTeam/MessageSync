@@ -69,6 +69,11 @@ public final class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        try {
+            dbConn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         getLogger().warning(ChatColor.RED + "Disabled Message Sync for PBF!");
     }
 

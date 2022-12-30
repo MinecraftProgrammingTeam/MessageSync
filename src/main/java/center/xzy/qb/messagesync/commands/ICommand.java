@@ -35,6 +35,9 @@ public abstract class ICommand {
     public String getCmdName() {
         return cmdName;
     }
+    public String getParams() {
+        return params;
+    }
 
 
     public String showUsage() {

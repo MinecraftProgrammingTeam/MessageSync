@@ -154,12 +154,17 @@ public class CommandHandler implements TabExecutor {
 
             //玩家可能会输错，找不到指令，那就不管了
             if (cmd != null) {
-                sender.sendMessage(cmd.showUsage());
+                String [] params = cmd.getParams().split(" ");
+                if (params.length > args.length-2) {
+                    String param = params[args.length - 2];
+                    return Arrays.asList(param);
+                } else {
+                    sender.sendMessage(cmd.showUsage());
+                }
             }else {
                 showHelp(sender);
                 return  null;
             }
-
         }
         return result;
     }

@@ -40,7 +40,7 @@ public class inventoryEventHandler implements Listener {
     public void onInventoryClick(InventoryClickEvent event) throws SQLException {
         if (event.getWhoClicked() instanceof Player == false) { return;}
         Player p = (Player)event.getWhoClicked();
-        if (event.getView().getTitle().equalsIgnoreCase(ChatColor.GREEN + "欢迎来到" + plugin.getConfig().getString("server-name") + "服务器 " + ChatColor.BLUE + "请登录") ) {
+        if (event.getView().getTitle().equalsIgnoreCase(ChatColor.GREEN + "欢迎来到" + plugin.getConfig().getString("server-name") + "服务器 " + ChatColor.BLUE + "请登录") || event.getView().getTitle().equalsIgnoreCase(ChatColor.GREEN + "欢迎来到" + plugin.getConfig().getString("server-name") + "服务器 " + ChatColor.BLUE + "注册（第一遍输入密码，第二遍确认密码）")) {
             List<String> LoginData = Main.LoginData.get(p.getName());
             switch (event.getRawSlot()){
                 case 15:
@@ -86,8 +86,10 @@ public class inventoryEventHandler implements Listener {
                                 statement.executeUpdate("insert into password values('" + p.getName() + "', '" + Main.MD5(password) + "', '" + dateString + "', '" + ip + "')");
                                 p.closeInventory();
                                 cleanData(p);
+                                p.setInvulnerable(false);
                                 p.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("reg-success-msg"));
                             } else {
+                                p.setInvulnerable(false);
                                 cleanData(p);
                                 p.kickPlayer(ChatColor.RED + "重复密码与密码不一致，请重试！");
                             }
@@ -98,11 +100,13 @@ public class inventoryEventHandler implements Listener {
                         if (Main.MD5(password).equals(currentPassword)) {
                             // 登录成功
                             p.closeInventory();
+                            p.setInvulnerable(false);
                             cleanData(p);
                             p.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("login-success-msg"));
                         } else {
                             // 密码错误
                             p.closeInventory();
+                            p.setInvulnerable(false);
                             cleanData(p);
                             p.kickPlayer(ChatColor.RED + plugin.getConfig().getString("login-fail-msg"));
                         }

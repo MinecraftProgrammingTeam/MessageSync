@@ -12,11 +12,15 @@ import org.bukkit.event.entity.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import center.xzy.qb.messagesync.Main;
+import org.sqlite.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,7 +50,25 @@ public class customEventHandler implements Listener {
         sendRequest(event.getJoinMessage());
 
         if (plugin.getConfig().getBoolean("login-verify")) {
-            Inventory inv = Bukkit.createInventory(null, InventoryType.CHEST, ChatColor.GREEN + "欢迎来到" + plugin.getConfig().getString("server-name") + "服务器 " + ChatColor.BLUE + "请登录");
+            String title = null;
+            try{
+                Statement statement = Main.dbConn.createStatement();
+                ResultSet rs = statement.executeQuery("select * from `password` where `id`='" + event.getPlayer().getName() + "'");
+                boolean flag = false;
+                while(rs.next()) {
+                    flag = true;
+                }
+                if (!flag) {
+                    // 注册
+                    title = ChatColor.GREEN + "欢迎来到" + plugin.getConfig().getString("server-name") + "服务器 " + ChatColor.BLUE + "注册（第一遍输入密码，第二遍确认密码）";
+                } else {
+                    // 登录
+                    title = ChatColor.GREEN + "欢迎来到" + plugin.getConfig().getString("server-name") + "服务器 " + ChatColor.BLUE + "请登录";
+                }
+            } catch (SQLException e){
+                throw new RuntimeException(e);
+            }
+            Inventory inv = Bukkit.createInventory(event.getPlayer(), InventoryType.CHEST, title);
 
             inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码1"));
             inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "1"));
@@ -117,6 +139,7 @@ public class customEventHandler implements Listener {
             Player p = event.getPlayer();
             p.closeInventory();
             p.openInventory(inv);
+            p.setInvulnerable(true);
 
             Main.LoginData.put(p.getName(), new ArrayList<>());
         }
