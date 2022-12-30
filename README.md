@@ -14,6 +14,12 @@
 - `qn`：要将消息同步到的群号
 - `uuid`：机器人UUID
 
+# 已知问题
+可能会与以下插件发生冲突：
+- 其他的登录插件例如`AuthMe`
+- `SkinsRestorer`
+- `TitleManager-2.3.1`
+
 # 开发
 - 日志  
   引入主类`import center.xzy.qb.messagesync.Main;`，然后使用`Main.instance.getLogger()`就可以获取到`logger`
