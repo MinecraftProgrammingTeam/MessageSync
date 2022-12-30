@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.event.entity.*;
@@ -30,6 +31,17 @@ import java.net.URLEncoder;
 
 public class customEventHandler implements Listener {
     Plugin plugin = Main.getPlugin(Main.class);
+
+    @EventHandler
+    public void CloseInventory(InventoryCloseEvent event) {
+        if (event.getView().getTitle().equalsIgnoreCase(ChatColor.GREEN + "欢迎来到" + plugin.getConfig().getString("server-name") + "服务器 " + ChatColor.BLUE + "请登录") || event.getView().getTitle().equalsIgnoreCase(ChatColor.GREEN + "欢迎来到" + plugin.getConfig().getString("server-name") + "服务器 " + ChatColor.BLUE + "注册（第一遍输入密码，第二遍确认密码）")) {
+            if (Main.regData.containsKey(event.getPlayer().getName()) || Main.LoginData.containsKey(event.getPlayer().getName())) {
+                Player p = (Player) event.getPlayer();
+                p.kickPlayer("请完成注册/验证");
+            }
+        }
+    }
+
     @EventHandler
     public void PlayerChat(AsyncPlayerChatEvent event) {
         sendRequest("<" + event.getPlayer().getName() + "> " + event.getMessage());

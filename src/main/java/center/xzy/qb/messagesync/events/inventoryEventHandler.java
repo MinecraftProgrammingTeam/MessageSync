@@ -84,8 +84,8 @@ public class inventoryEventHandler implements Listener {
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                                 String dateString = sdf.format(date);
                                 statement.executeUpdate("insert into password values('" + p.getName() + "', '" + Main.MD5(password) + "', '" + dateString + "', '" + ip + "')");
-                                p.closeInventory();
                                 cleanData(p);
+                                p.closeInventory();
                                 p.setInvulnerable(false);
                                 p.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("reg-success-msg"));
                             } else {
@@ -99,15 +99,15 @@ public class inventoryEventHandler implements Listener {
                     } else {
                         if (Main.MD5(password).equals(currentPassword)) {
                             // 登录成功
+                            cleanData(p);
                             p.closeInventory();
                             p.setInvulnerable(false);
-                            cleanData(p);
                             p.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("login-success-msg"));
                         } else {
                             // 密码错误
+                            cleanData(p);
                             p.closeInventory();
                             p.setInvulnerable(false);
-                            cleanData(p);
                             p.kickPlayer(ChatColor.RED + plugin.getConfig().getString("login-fail-msg"));
                         }
                     }
