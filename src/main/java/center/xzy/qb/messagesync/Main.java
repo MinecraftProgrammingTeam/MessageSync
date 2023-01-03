@@ -35,18 +35,20 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        try {
-            dbConn = DriverManager.getConnection("jdbc:sqlite:"+System.getProperty("user.dir")+"/plugins/MessageSync/user.db");
-            initDatabase(dbConn);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
 
         // Plugin startup logic
         // config.yml
         getConfig().options().copyDefaults();
         saveDefaultConfig();
         Plugin plugin = getPlugin(Main.class);
+
+        // 初始化Sqlite数据库
+        try {
+            dbConn = DriverManager.getConnection("jdbc:sqlite:"+System.getProperty("user.dir")+"/plugins/MessageSync/user.db");
+            initDatabase(dbConn);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         // reg commands
         getCommand("ms").setExecutor(new CommandHandler());
@@ -57,7 +59,7 @@ public final class Main extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new inventoryEventHandler(), this);
 
         // check TitleManager
-        // more code...
+        // TODO connect TitleManager
 
         // WebSocket
         if (getConfig().getBoolean("enable-socket")){
