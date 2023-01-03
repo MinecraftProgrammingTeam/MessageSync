@@ -18,7 +18,6 @@ public class SocketClient extends WebSocketClient{
 
     public SocketClient(String url) throws URISyntaxException {
         super(new URI(url));
-        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -29,7 +28,6 @@ public class SocketClient extends WebSocketClient{
 
     @Override
     public void onMessage(String paramString) {
-        // TODO Auto-generated method stub
         Main.instance.getLogger().warning(ChatColor.BLUE + "WebSocket收到消息：" + paramString);
         JSONObject object = JSONObject.parseObject(paramString);
         switch (object.getString("type")){
@@ -47,13 +45,11 @@ public class SocketClient extends WebSocketClient{
 
     @Override
     public void onClose(int paramInt, String paramString, boolean paramBoolean) {
-        // TODO Auto-generated method stub
         Main.instance.getLogger().warning(ChatColor.RED + "WebSocket被关闭：" + paramString);
     }
 
     @Override
     public void onError(Exception e) {
-        // TODO Auto-generated method stub
         Main.instance.getLogger().warning(ChatColor.RED + "WebSocket异常：" + e.getMessage());
     }
 }
