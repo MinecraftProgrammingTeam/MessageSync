@@ -2,6 +2,7 @@ package center.xzy.qb.messagesync;
 
 import center.xzy.qb.messagesync.executor.*;
 import center.xzy.qb.messagesync.commands.*;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -25,23 +26,22 @@ import java.sql.ResultSet;
 public final class Main extends JavaPlugin {
     public static boolean pluginStatus = true;
     public static Main instance;
-    public static Map<String, List<String>> LoginData = new HashMap<>();
-    public static Map<String, List<String>> regData = new HashMap<>();
-    public static Map<String, String> regIpData = new HashMap<>();
-    public static Connection dbConn;
-    static {
+    public static Map<String, List<String>> LoginData = new HashMap<>();  // 登录储存的玩家数据
+    public static Map<String, String> gmData = new HashMap<>();  // 玩家游戏模式数据
+    public static Map<String, List<String>> regData = new HashMap<>();  // 注册（二次输入密码）储存的玩家数据
+    public static Map<String, String> regIpData = new HashMap<>();  // prelogin储存的登录IP数据
+    public static Connection dbConn;  // 数据库连接，在`onEnable`方法中初始化
+
+    @Override
+    public void onEnable() {
+        instance = this;
         try {
             dbConn = DriverManager.getConnection("jdbc:sqlite:"+System.getProperty("user.dir")+"/plugins/MessageSync/user.db");
             initDatabase(dbConn);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
 
-
-    @Override
-    public void onEnable() {
-        instance = this;
         // Plugin startup logic
         // config.yml
         getConfig().options().copyDefaults();
@@ -55,7 +55,13 @@ public final class Main extends JavaPlugin {
         // register events
         getServer().getPluginManager().registerEvents(new customEventHandler(), this);
         getServer().getPluginManager().registerEvents(new inventoryEventHandler(), this);
-        getLogger().info(ChatColor.GREEN + "Enabled Message Sync Plugin for PBF!");
+
+        // check TitleManager
+        // more code...
+
+        // log information
+        getLogger().info(ChatColor.GREEN + "More info on " + ChatColor.BLUE + "https://minept.top");
+        getLogger().info(ChatColor.GREEN + "Enabled MessageSync Plugin for PBF!");
     }
 
     @Override

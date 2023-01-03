@@ -3,6 +3,7 @@ version: '${project.version}'
 main: center.xzy.qb.messagesync.Main
 api-version: 1.13
 authors: [xzyStudio]
+soft-depend: [TitleManager]
 description: Message Sync Plugin for PigBotFramework
 website: https://qb.xzy.center
 commands:

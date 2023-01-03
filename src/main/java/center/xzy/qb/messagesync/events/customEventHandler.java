@@ -3,6 +3,7 @@ package center.xzy.qb.messagesync.events;
 import center.xzy.qb.messagesync.scheduler.PlayerLogin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,6 +51,17 @@ public class customEventHandler implements Listener {
     }
 
     @EventHandler
+    public void PlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        if (Main.regData.containsKey(event.getPlayer().getName()) || Main.LoginData.containsKey(event.getPlayer().getName())){
+            if (!event.getMessage().equals("/ms login")){
+                event.setMessage(" ");
+                event.setCancelled(true);
+                event.getPlayer().sendMessage(ChatColor.RED + "在通过登录/注册之前不可使用指令！");
+            }
+        }
+    }
+
+    @EventHandler
     public void PlayerPreLogin(AsyncPlayerPreLoginEvent event) {
         if (Main.regIpData.containsKey(event.getName())){
             Main.regIpData.replace(event.getName(), event.getAddress().toString());
@@ -89,6 +101,14 @@ public class customEventHandler implements Listener {
             PlayerLogin playerLogin = new PlayerLogin();
             playerLogin.setPlayer(event.getPlayer());
             playerLogin.runTaskLater(Main.instance, timeout);
+            Player player = event.getPlayer();
+            if (Main.gmData.containsKey(player.getName())){
+                Main.gmData.replace(player.getName(), player.getGameMode().toString());
+            } else {
+                Main.gmData.put(player.getName(), player.getGameMode().toString());
+            }
+            Main.instance.getLogger().warning(player.getGameMode().toString());
+            player.setGameMode(GameMode.ADVENTURE);
             openInv(event.getPlayer(), title);
         }
     }

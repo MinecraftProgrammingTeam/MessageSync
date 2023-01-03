@@ -1,6 +1,7 @@
 package center.xzy.qb.messagesync.events;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -32,7 +33,11 @@ public class inventoryEventHandler implements Listener {
     }
 
     private void cleanData(Player p) {
+        p.setInvulnerable(false);
+        Main.instance.getLogger().info(Main.gmData.get(p.getName()).toString());
+        p.setGameMode(GameMode.valueOf(Main.gmData.get(p.getName())));
         Main.LoginData.remove(p.getName());
+        Main.gmData.remove(p.getName());
         Main.regData.remove(p.getName());
     }
 
@@ -64,6 +69,7 @@ public class inventoryEventHandler implements Listener {
                                 if (Main.regIpData.containsKey(p.getName())) {
                                     ip = Main.regIpData.get(p.getName());
                                 } else {
+                                    cleanData(p);
                                     p.kickPlayer("没有ID的PreLogin数据，请重试！");
                                     return ;
                                 }
@@ -75,6 +81,7 @@ public class inventoryEventHandler implements Listener {
                                 }
 
                                 if (ipCount >= plugin.getConfig().getInt("reg-ip-count") && plugin.getConfig().getInt("reg-ip-count") != 0) {
+                                    cleanData(p);
                                     p.kickPlayer(plugin.getConfig().getString("reg-ip-max-fail-msg"));
                                     return ;
                                 }
@@ -86,10 +93,8 @@ public class inventoryEventHandler implements Listener {
                                 statement.executeUpdate("insert into password values('" + p.getName() + "', '" + Main.MD5(password) + "', '" + dateString + "', '" + ip + "')");
                                 cleanData(p);
                                 p.closeInventory();
-                                p.setInvulnerable(false);
                                 p.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("reg-success-msg"));
                             } else {
-                                p.setInvulnerable(false);
                                 cleanData(p);
                                 p.kickPlayer(ChatColor.RED + "重复密码与密码不一致，请重试！");
                             }
@@ -101,13 +106,11 @@ public class inventoryEventHandler implements Listener {
                             // 登录成功
                             cleanData(p);
                             p.closeInventory();
-                            p.setInvulnerable(false);
                             p.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("login-success-msg"));
                         } else {
                             // 密码错误
                             cleanData(p);
                             p.closeInventory();
-                            p.setInvulnerable(false);
                             p.kickPlayer(ChatColor.RED + plugin.getConfig().getString("login-fail-msg"));
                         }
                     }

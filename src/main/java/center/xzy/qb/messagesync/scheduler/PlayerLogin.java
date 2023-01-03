@@ -13,8 +13,10 @@ public class PlayerLogin extends BukkitRunnable{
     @Override
     public void run() {
         if (Main.regData.containsKey(player.getName())){
+            Main.regData.remove(player.getName());
             player.kickPlayer(Main.instance.getConfig().getString("reg-allow-tick-msg"));
         } else if (Main.LoginData.containsKey(player.getName())) {
+            Main.LoginData.remove(player.getName());
             player.kickPlayer(Main.instance.getConfig().getString("login-allow-tick-msg"));
         }
     }
