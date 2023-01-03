@@ -2,7 +2,6 @@ package center.xzy.qb.messagesync.executor;
 
 import center.xzy.qb.messagesync.Main;
 import org.bukkit.ChatColor;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,9 +18,9 @@ public class sayHandler implements CommandExecutor {
             msg += args[i] +" ";
         }
         if (sender instanceof Player){
-            Bukkit.broadcastMessage("<" + sender.getName() + "> " + msg);
+            Main.instance.getServer().broadcastMessage("<" + sender.getName() + "> " + msg);
         }else {
-            Bukkit.broadcastMessage(plugin.getConfig().getString("say-prefix") + " " + msg);
+            Main.instance.getServer().broadcastMessage(plugin.getConfig().getString("say-prefix") + " " + msg);
         }
         return true;
     }

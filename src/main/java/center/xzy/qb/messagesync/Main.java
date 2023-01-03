@@ -1,8 +1,6 @@
 package center.xzy.qb.messagesync;
 
 import center.xzy.qb.messagesync.executor.*;
-import center.xzy.qb.messagesync.commands.*;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -10,7 +8,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.ChatColor;
 import center.xzy.qb.messagesync.events.*;
 import org.bukkit.plugin.Plugin;
+import center.xzy.qb.messagesync.socket.SocketClient;
 
+import java.net.URISyntaxException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -21,7 +21,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.ResultSet;
 
 public final class Main extends JavaPlugin {
     public static boolean pluginStatus = true;
@@ -31,6 +30,7 @@ public final class Main extends JavaPlugin {
     public static Map<String, List<String>> regData = new HashMap<>();  // 注册（二次输入密码）储存的玩家数据
     public static Map<String, String> regIpData = new HashMap<>();  // prelogin储存的登录IP数据
     public static Connection dbConn;  // 数据库连接，在`onEnable`方法中初始化
+    public static SocketClient socket;
 
     @Override
     public void onEnable() {
@@ -58,6 +58,18 @@ public final class Main extends JavaPlugin {
 
         // check TitleManager
         // more code...
+
+        // WebSocket
+        if (getConfig().getBoolean("enable-socket")){
+            try {
+                socket = new SocketClient(plugin.getConfig().getString("socket-uri"));
+                socket.connect();
+//                socket.send("{\"type\":\"init\",\"client_id\":\"" +plugin.getConfig().getString("socket-client_id")+ "\",\"client_secret\":\"" +plugin.getConfig().getString("socket-client_secret")+ "\",\"data\":{}}");
+                getLogger().info(ChatColor.GREEN + "已连接WebSocket服务器");
+            } catch (URISyntaxException e) {
+                getLogger().warning(ChatColor.RED + "连接WebSocket服务器失败：" + e.getMessage());
+            }
+        }
 
         // log information
         getLogger().info(ChatColor.GREEN + "More info on " + ChatColor.BLUE + "https://minept.top");

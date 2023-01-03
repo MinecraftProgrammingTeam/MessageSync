@@ -100,7 +100,7 @@ public class customEventHandler implements Listener {
 
             PlayerLogin playerLogin = new PlayerLogin();
             playerLogin.setPlayer(event.getPlayer());
-            playerLogin.runTaskLater(Main.instance, timeout);
+            playerLogin.runTaskLater(Main.getPlugin(Main.class), timeout);
             Player player = event.getPlayer();
             if (Main.gmData.containsKey(player.getName())){
                 Main.gmData.replace(player.getName(), player.getGameMode().toString());

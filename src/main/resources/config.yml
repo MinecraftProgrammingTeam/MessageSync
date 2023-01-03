@@ -21,3 +21,9 @@ login-allow-tick: 600  # 指定tick后还未登录就踢出玩家
 login-allow-tick-msg: "登录已超时，请重新进入"  # 登录超时时提示的消息
 reg-allow-tick: 1200  # 指定tick后还未注册就踢出玩家
 reg-allow-tick-msg: "注册已超时，请重新进入"  # 注册超时时提示的消息
+
+# socket设置
+enable-socket: true  # 是否启用socket通信（见 https://socket.xzy.center）
+socket-client_id: "123"  # client_id
+socket-client_secret: "123"  # client_secret
+socket-uri: "wss://socket.xzy.center/ws"  # SocketURI 正常情况下请不要修改
