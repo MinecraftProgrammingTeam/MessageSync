@@ -86,6 +86,7 @@ public final class Main extends JavaPlugin {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        socket.close();
         getLogger().warning(ChatColor.RED + "Disabled Message Sync for PBF!");
     }
 
