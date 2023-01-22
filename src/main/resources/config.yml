@@ -26,4 +26,4 @@ reg-allow-tick-msg: "注册已超时，请重新进入"  # 注册超时时提示
 enable-socket: true  # 是否启用socket通信（见 https://socket.xzy.center）
 socket-client_id: "123"  # client_id
 socket-client_secret: "123"  # client_secret
-socket-uri: "wss://socket.xzy.center/ws"  # SocketURI 正常情况下请不要修改
+socket-uri: "wss://socket.xzynb.top/ws"  # SocketURI 正常情况下请不要修改
