@@ -5,7 +5,7 @@ server-name: "Aurora Field"  # 服务器名
 message-sync: false  # 此项设为false开启消息同步
 qn: 0  #要同步过去的群号
 uuid: ""  # 机器人UUID
-message-report-url: "https://qqbot.xzy.center/1000"  # 上报地址，一般情况下无需更改
+message-report-url: "https://pbfpost.xzynb.top/1000"  # 上报地址，一般情况下无需更改
 
 # say指令前缀
 say-prefix: "[Q群消息]"
@@ -26,4 +26,4 @@ reg-allow-tick-msg: "注册已超时，请重新进入"  # 注册超时时提示
 enable-socket: true  # 是否启用socket通信（见 https://socket.xzy.center）
 socket-client_id: "123"  # client_id
 socket-client_secret: "123"  # client_secret
-socket-uri: "wss://socket.xzy.center/ws"  # SocketURI 正常情况下请不要修改
+socket-uri: "wss://socket.xzynb.top/ws"  # SocketURI 正常情况下请不要修改
