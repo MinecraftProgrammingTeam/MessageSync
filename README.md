@@ -8,7 +8,7 @@
 - 版本：我也不知道兼容哪个版本，测试兼容spigot-1.19.3
 
 # 使用
-相关视频教程：[【MC服务器消息同步 - 小猪比机器人】 ](https://www.bilibili.com/video/BV1XU4y1r7z1/?share_source=copy_web&vd_source=6550d40762e4dc7c8327189d8582544b)  
+相关视频教程：[【MC服务器消息同步 - 小猪比机器人】 ](https://www.bilibili.com/video/BV1JR4y1m7Ez/?buvid=XYF1C76FD8262BB081EC618D2B1C25CC1BDBE&is_story_h5=false&mid=HbSPY7IrFHktyJUZi%2BLvQQ%3D%3D&p=1&plat_id=116&share_from=ugc&share_medium=android&share_plat=android&share_session_id=059bb687-d121-4905-b8b2-7e3c6844e1bf&share_source=COPY&share_tag=s_i&timestamp=1675558331&unique_k=fv3rtH6&up_id=227711953)  
 填写配置，位于`./plugins/MessageSync/config.yml`  
 注释都很详细，全中文，看着填就行
 
