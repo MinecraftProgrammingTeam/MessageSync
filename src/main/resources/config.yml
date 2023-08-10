@@ -2,10 +2,10 @@
 server-name: "Aurora Field"  # 服务器名
 
 # 消息同步部分
-message-sync: false  # 此项设为false开启消息同步
+message-sync: true  # 此项设为false开启消息同步
 qn: 0  #要同步过去的群号
 uuid: ""  # 机器人UUID
-message-report-url: "https://pbfpost.xzynb.top/1000"  # 上报地址，一般情况下无需更改
+message-report-url: "https://pbfpost.xzynb.top"  # 上报地址，一般情况下无需更改
 
 # say指令前缀
 say-prefix: "[Q群消息]"
