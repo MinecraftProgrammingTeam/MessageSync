@@ -1,6 +1,13 @@
 package center.xzy.qb.messagesync.events;
 
+import center.xzy.qb.messagesync.Main;
 import center.xzy.qb.messagesync.scheduler.PlayerLogin;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.concurrent.FutureCallback;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.util.EntityUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -8,37 +15,26 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
-import org.bukkit.event.entity.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
-import center.xzy.qb.messagesync.Main;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.sqlite.util.StringUtils;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.concurrent.FutureCallback;
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.apache.http.impl.nio.client.HttpAsyncClients;
-import org.apache.http.util.EntityUtils;
 
 import java.io.*;
-import java.util.concurrent.CountDownLatch;
-
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 
 public class customEventHandler implements Listener {
     Plugin plugin = Main.getPlugin(Main.class);
@@ -95,8 +91,8 @@ public class customEventHandler implements Listener {
         sendRequest(event.getJoinMessage());
 
         if (plugin.getConfig().getBoolean("login-verify")) {
-            String title = null;
-            int timeout = 0;
+            String title;
+            int timeout;
             try{
                 Statement statement = Main.dbConn.createStatement();
                 ResultSet rs = statement.executeQuery("select * from `password` where `id`='" + event.getPlayer().getName() + "'");
@@ -295,9 +291,6 @@ public class customEventHandler implements Listener {
         msg = regReplace(msg, pattern1, "");
         msg = regReplace(msg, pattern2, "");
 
-        // 首先抓取异常并处理
-        String returnString = "1";
-
         // 拼接url
         int qn = plugin.getConfig().getInt("qn");
         String uuid = plugin.getConfig().getString("uuid");
@@ -335,9 +328,10 @@ public class customEventHandler implements Listener {
                 BufferedReader isRead = new BufferedReader(new InputStreamReader(isString));
 
                 // 6 输出打印获取到的文件流
-                String str = "";
+                String str;
                 while ((str = isRead.readLine()) != null) {
-                    str = new String(str.getBytes(), "UTF-8"); //解决中文乱码问题
+                    str = new String(str.getBytes(), StandardCharsets.UTF_8); //解决中文乱码问题
+                    System.out.println(str);
                 }
 
                 // 7 关闭流
