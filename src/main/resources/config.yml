@@ -8,6 +8,7 @@ uuid: ""  # 机器人UUID
 message-report-url: "https://pbfpost.xzynb.top"  # 上报地址，一般情况下无需更改
 sync-flag-enable: true  #是否启用按字符同步（当玩家发送消息前带指定符号时，同步玩家消息，否则不同步）
 sync-flag: "#"
+async-enable: true  # 是否启用异步请求
 
 # say指令前缀
 say-prefix: "[Q群消息]"

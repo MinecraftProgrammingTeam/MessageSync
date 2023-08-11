@@ -6,7 +6,7 @@
 
     <groupId>center.xzy.qb</groupId>
     <artifactId>MessageSync</artifactId>
-    <version>1.14-SNAPSHOT</version>
+    <version>1.15-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>MessageSync</name>
@@ -95,6 +95,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.47</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpasyncclient</artifactId>
+            <version>4.1.5</version>
         </dependency>
     </dependencies>
 </project>

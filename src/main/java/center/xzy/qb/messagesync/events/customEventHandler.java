@@ -18,9 +18,16 @@ import center.xzy.qb.messagesync.Main;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.sqlite.util.StringUtils;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.concurrent.FutureCallback;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.util.EntityUtils;
+
+import java.io.*;
+import java.util.concurrent.CountDownLatch;
+
 import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -53,6 +60,7 @@ public class customEventHandler implements Listener {
             if (message.startsWith(Objects.requireNonNull(plugin.getConfig().getString("sync-flag")))){
                 if (message.length() != 0) {
                     message = message.substring(1);
+                    event.setMessage(message);
                 }
             } else {
                 return;
@@ -225,28 +233,91 @@ public class customEventHandler implements Listener {
         return m.replaceAll(newString);
     }
 
-    public void sendRequest(String msg) {
+    public void sendAsyncRequest(String msg){
         if (Main.pluginStatus && plugin.getConfig().getBoolean("message-sync")) {
-            // 去除颜色代码
-            String pattern1 = "§[a-z0-9]?";
-            String pattern2 = "&[a-z0-9]?";
-            msg = regReplace(msg, pattern1, "");
-            msg = regReplace(msg, pattern2, "");
-
-            // 首先抓取异常并处理
-            String returnString = "1";
             try {
-                // 拼接url
-                Integer qn = plugin.getConfig().getInt("qn");
-                String uuid = plugin.getConfig().getString("uuid");
-                String urlP = plugin.getConfig().getString("message-report-url") + "/MCServer?msg=" + URLEncoder.encode(msg, "UTF-8") + "&qn=" + qn + "&uuid=" + uuid;
-                if ((uuid == null || uuid.length() == 0) || (qn == 0)){
-                    Main.instance.getLogger().warning(ChatColor.RED + "Please fill the config in ./plugin/MessageSync/config.yml and reload the server!");
-                    return ;
+                CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
+                httpclient.start();
+                final CountDownLatch latch = new CountDownLatch(1);
+                final HttpGet request = new HttpGet(parseMsg(msg));
+                System.out.println(" caller thread id is : " + Thread.currentThread().getId());
+
+                httpclient.execute(request, new FutureCallback<HttpResponse>() {
+                    @Override
+                    public void completed(final HttpResponse response) {
+                        latch.countDown();
+                        System.out.println(" callback thread id is : " + Thread.currentThread().getId());
+                        System.out.println(request.getRequestLine() + "->" + response.getStatusLine());
+                        try {
+                            String content = EntityUtils.toString(response.getEntity(), "UTF-8");
+                            System.out.println(" response content is : " + content);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void failed(final Exception ex) {
+                        latch.countDown();
+                        System.out.println(request.getRequestLine() + "->" + ex);
+                        System.out.println(" callback thread id is : " + Thread.currentThread().getId());
+                    }
+
+                    @Override
+                    public void cancelled() {
+                        latch.countDown();
+                        System.out.println(request.getRequestLine() + " cancelled");
+                        System.out.println(" callback thread id is : " + Thread.currentThread().getId());
+                    }
+
+                });
+                try {
+                    latch.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
 
+                try {
+                    httpclient.close();
+                } catch (IOException ignore) {
+
+                }
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public String parseMsg(String msg) throws UnsupportedEncodingException {
+        // 去除颜色代码
+        String pattern1 = "§[a-z0-9]?";
+        String pattern2 = "&[a-z0-9]?";
+        msg = regReplace(msg, pattern1, "");
+        msg = regReplace(msg, pattern2, "");
+
+        // 首先抓取异常并处理
+        String returnString = "1";
+
+        // 拼接url
+        int qn = plugin.getConfig().getInt("qn");
+        String uuid = plugin.getConfig().getString("uuid");
+        String urlP = plugin.getConfig().getString("message-report-url") + "/MCServer?msg=" + URLEncoder.encode(msg, "UTF-8") + "&qn=" + qn + "&uuid=" + uuid;
+        if ((uuid == null || uuid.length() == 0) || (qn == 0)){
+            Main.instance.getLogger().warning(ChatColor.RED + "Please fill the config in ./plugin/MessageSync/config.yml and reload the server!");
+        }
+        return urlP;
+    }
+
+    public void sendRequest(String msg) {
+        if (plugin.getConfig().getBoolean("async-enable")){
+            sendAsyncRequest(msg);
+            return;
+        }
+
+        if (Main.pluginStatus && plugin.getConfig().getBoolean("message-sync")) {
+            try {
                 // 1  创建URL对象,接收用户传递访问地址对象链接
-                URL url = new URL(urlP);
+                URL url = new URL(parseMsg(msg));
 
                 // 2 打开用户传递URL参数地址
                 HttpURLConnection connect = (HttpURLConnection) url.openConnection();
@@ -267,15 +338,11 @@ public class customEventHandler implements Listener {
                 String str = "";
                 while ((str = isRead.readLine()) != null) {
                     str = new String(str.getBytes(), "UTF-8"); //解决中文乱码问题
-                    //          System.out.println("文件解析打印：");
-                    //          System.out.println(str);
-                    returnString = str;
                 }
 
                 // 7 关闭流
                 isString.close();
                 connect.disconnect();
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
