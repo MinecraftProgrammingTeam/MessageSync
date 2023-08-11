@@ -26,6 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.net.HttpURLConnection;
@@ -47,7 +48,17 @@ public class customEventHandler implements Listener {
 
     @EventHandler
     public void PlayerChat(AsyncPlayerChatEvent event) {
-        sendRequest("<" + event.getPlayer().getName() + "> " + event.getMessage());
+        String message = event.getMessage();
+        if (plugin.getConfig().getBoolean("sync-flag-enable")){
+            if (message.startsWith(Objects.requireNonNull(plugin.getConfig().getString("sync-flag")))){
+                if (message.length() != 0) {
+                    message = message.substring(1);
+                }
+            } else {
+                return;
+            }
+        }
+        sendRequest("<" + event.getPlayer().getName() + "> " + message);
     }
 
     @EventHandler
