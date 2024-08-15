@@ -1,8 +1,6 @@
 package center.xzy.qb.messagesync.socket;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
+import center.xzy.qb.messagesync.Main;
 import com.alibaba.fastjson.JSONObject;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,7 +9,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
-import center.xzy.qb.messagesync.Main;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class SocketClient extends WebSocketClient{
     Plugin plugin = Main.getPlugin(Main.class);
@@ -28,8 +27,11 @@ public class SocketClient extends WebSocketClient{
 
     @Override
     public void onMessage(String paramString) {
-        Main.instance.getLogger().warning(ChatColor.BLUE + "WebSocket收到消息：" + paramString);
         JSONObject object = JSONObject.parseObject(paramString);
+        if (object.get("type") == "ping") {
+            return;
+        }
+        Main.instance.getLogger().warning(ChatColor.BLUE + "WebSocket收到消息：" + paramString);
         switch (object.getString("type")){
             case "command":
                 Bukkit.getScheduler().runTask(Main.instance, () -> {
@@ -46,6 +48,13 @@ public class SocketClient extends WebSocketClient{
     @Override
     public void onClose(int paramInt, String paramString, boolean paramBoolean) {
         Main.instance.getLogger().warning(ChatColor.RED + "WebSocket被关闭：" + paramString);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Main.instance.getLogger().warning(ChatColor.RED + "WebSocket尝试重连");
+                connect();
+            }
+        }.runTaskLater(Main.instance, 20L);
     }
 
     @Override
