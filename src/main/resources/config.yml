@@ -3,6 +3,7 @@ server-name: "Aurora Field"  # 服务器名
 
 # 消息同步部分
 enable-socket: true  # 是否启用消息同步
+sync-qn: 871260826  # 群号
 sync-flag-enable: true  #是否启用按字符同步（当玩家发送消息前带指定符号时，同步玩家消息，否则不同步）
 sync-flag: "#"
 

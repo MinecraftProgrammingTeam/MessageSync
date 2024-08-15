@@ -2,6 +2,7 @@ package center.xzy.qb.messagesync.events;
 
 import center.xzy.qb.messagesync.Main;
 import center.xzy.qb.messagesync.scheduler.PlayerLogin;
+import com.alibaba.fastjson.JSONObject;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -241,7 +242,11 @@ public class customEventHandler implements Listener {
                 return;
             }
 
-            Main.socket.csend("server_message", msg);
+            Integer qn = plugin.getConfig().getInt("sync-qn");
+            JSONObject data = new JSONObject();
+            data.put("msg", msg);
+            data.put("qn", qn);
+            Main.socket.csend("server_message", data);
         }
     }
 }
