@@ -1,8 +1,7 @@
 package center.xzy.qb.messagesync.executor;
 
-import center.xzy.qb.messagesync.Main;
-import center.xzy.qb.messagesync.commands.impl.*;
 import center.xzy.qb.messagesync.commands.ICommand;
+import center.xzy.qb.messagesync.commands.impl.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -59,6 +58,7 @@ public class CommandHandler implements TabExecutor {
         registerCommand(new user());
         registerCommand(new login());
         registerCommand(new reload());
+        registerCommand(new reconnect());
     }
 
     /**

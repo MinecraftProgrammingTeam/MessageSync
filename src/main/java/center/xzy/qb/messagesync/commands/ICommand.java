@@ -3,7 +3,6 @@ package center.xzy.qb.messagesync.commands;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.sql.SQLException;
 
 public abstract class ICommand {
 

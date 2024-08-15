@@ -1,26 +1,28 @@
 package center.xzy.qb.messagesync;
 
-import center.xzy.qb.messagesync.executor.*;
+import center.xzy.qb.messagesync.events.customEventHandler;
+import center.xzy.qb.messagesync.events.inventoryEventHandler;
+import center.xzy.qb.messagesync.executor.CommandHandler;
+import center.xzy.qb.messagesync.executor.sayHandler;
+import center.xzy.qb.messagesync.socket.SocketClient;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.ChatColor;
-import center.xzy.qb.messagesync.events.*;
 import org.bukkit.plugin.Plugin;
-import center.xzy.qb.messagesync.socket.SocketClient;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.net.URISyntaxException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class Main extends JavaPlugin {
     public static boolean pluginStatus = true;
@@ -63,19 +65,22 @@ public final class Main extends JavaPlugin {
 
         // WebSocket
         if (getConfig().getBoolean("enable-socket")){
-            try {
-                socket = new SocketClient(plugin.getConfig().getString("socket-uri"));
-                socket.connect();
-//                socket.send("{\"type\":\"init\",\"client_id\":\"" +plugin.getConfig().getString("socket-client_id")+ "\",\"client_secret\":\"" +plugin.getConfig().getString("socket-client_secret")+ "\",\"data\":{}}");
-                getLogger().info(ChatColor.GREEN + "已连接WebSocket服务器");
-            } catch (URISyntaxException e) {
-                getLogger().warning(ChatColor.RED + "连接WebSocket服务器失败：" + e.getMessage());
-            }
+            reconnectSocket();
         }
 
         // log information
-        getLogger().info(ChatColor.GREEN + "More info on " + ChatColor.BLUE + "https://minept.top");
+        getLogger().info(ChatColor.GREEN + "More info on " + ChatColor.BLUE + "https://github.com/MinecraftProgrammingTeam/MessageSync");
         getLogger().info(ChatColor.GREEN + "Enabled MessageSync Plugin for PBF!");
+    }
+
+    public static void reconnectSocket(){
+        try {
+            socket = new SocketClient(instance.getConfig().getString("socket-uri"));
+            socket.connect();
+            instance.getLogger().info(ChatColor.GREEN + "已连接WebSocket服务器");
+        } catch (URISyntaxException e) {
+            instance.getLogger().warning(ChatColor.RED + "连接WebSocket服务器失败：" + e.getMessage());
+        }
     }
 
     @Override

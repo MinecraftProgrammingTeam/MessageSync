@@ -2,12 +2,6 @@ package center.xzy.qb.messagesync.events;
 
 import center.xzy.qb.messagesync.Main;
 import center.xzy.qb.messagesync.scheduler.PlayerLogin;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.concurrent.FutureCallback;
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.apache.http.impl.nio.client.HttpAsyncClients;
-import org.apache.http.util.EntityUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -22,17 +16,12 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -229,61 +218,6 @@ public class customEventHandler implements Listener {
         return m.replaceAll(newString);
     }
 
-    public void sendAsyncRequest(String msg){
-        if (Main.pluginStatus && plugin.getConfig().getBoolean("message-sync")) {
-            try {
-                CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
-                httpclient.start();
-                final CountDownLatch latch = new CountDownLatch(1);
-                final HttpGet request = new HttpGet(parseMsg(msg));
-                System.out.println(" caller thread id is : " + Thread.currentThread().getId());
-
-                httpclient.execute(request, new FutureCallback<HttpResponse>() {
-                    @Override
-                    public void completed(final HttpResponse response) {
-                        latch.countDown();
-                        System.out.println(" callback thread id is : " + Thread.currentThread().getId());
-                        System.out.println(request.getRequestLine() + "->" + response.getStatusLine());
-                        try {
-                            String content = EntityUtils.toString(response.getEntity(), "UTF-8");
-                            System.out.println(" response content is : " + content);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void failed(final Exception ex) {
-                        latch.countDown();
-                        System.out.println(request.getRequestLine() + "->" + ex);
-                        System.out.println(" callback thread id is : " + Thread.currentThread().getId());
-                    }
-
-                    @Override
-                    public void cancelled() {
-                        latch.countDown();
-                        System.out.println(request.getRequestLine() + " cancelled");
-                        System.out.println(" callback thread id is : " + Thread.currentThread().getId());
-                    }
-
-                });
-                try {
-                    latch.await();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    httpclient.close();
-                } catch (IOException ignore) {
-
-                }
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public String parseMsg(String msg) throws UnsupportedEncodingException {
         // 去除颜色代码
         String pattern1 = "§[a-z0-9]?";
@@ -292,54 +226,22 @@ public class customEventHandler implements Listener {
         msg = regReplace(msg, pattern2, "");
 
         // 拼接url
-        int qn = plugin.getConfig().getInt("qn");
-        String uuid = plugin.getConfig().getString("uuid");
-        String urlP = plugin.getConfig().getString("message-report-url") + "/MCServer?msg=" + URLEncoder.encode(msg, "UTF-8") + "&qn=" + qn + "&uuid=" + uuid;
-        if ((uuid == null || uuid.length() == 0) || (qn == 0)){
-            Main.instance.getLogger().warning(ChatColor.RED + "Please fill the config in ./plugin/MessageSync/config.yml and reload the server!");
-        }
-        return urlP;
+        return msg;
     }
 
-    public void sendRequest(String msg) {
-        if (plugin.getConfig().getBoolean("async-enable")){
-            sendAsyncRequest(msg);
-            return;
-        }
-
-        if (Main.pluginStatus && plugin.getConfig().getBoolean("message-sync")) {
+    public void sendRequest(String msg){
+        if (Main.pluginStatus && plugin.getConfig().getBoolean("enable-socket")) {
             try {
-                // 1  创建URL对象,接收用户传递访问地址对象链接
-                URL url = new URL(parseMsg(msg));
-
-                // 2 打开用户传递URL参数地址
-                HttpURLConnection connect = (HttpURLConnection) url.openConnection();
-                connect.setRequestProperty("User-agent", "	Mozilla/5.0 (Windows NT 6.1; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0");
-
-                // 3 设置HTTP请求的一些参数信息
-                connect.setRequestMethod("GET"); // 参数必须大写
-                connect.connect();
-
-
-                // 4 获取URL请求到的数据，并创建数据流接收
-                InputStream isString = connect.getInputStream();
-
-                // 5 构建一个字符流缓冲对象,承载URL读取到的数据
-                BufferedReader isRead = new BufferedReader(new InputStreamReader(isString));
-
-                // 6 输出打印获取到的文件流
-                String str;
-                while ((str = isRead.readLine()) != null) {
-                    str = new String(str.getBytes(), StandardCharsets.UTF_8); //解决中文乱码问题
-                    System.out.println(str);
-                }
-
-                // 7 关闭流
-                isString.close();
-                connect.disconnect();
-            } catch (Exception e) {
-                e.printStackTrace();
+                msg = parseMsg(msg);
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
             }
+            if (Main.socket.isClosed()){
+                Main.instance.getLogger().warning(ChatColor.RED + "WebSocket连接已关闭，无法发送消息！");
+                return;
+            }
+
+            Main.socket.csend("server_message", msg);
         }
     }
 }

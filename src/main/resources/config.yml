@@ -2,13 +2,14 @@
 server-name: "Aurora Field"  # 服务器名
 
 # 消息同步部分
-message-sync: true  # 此项设为true开启消息同步
-qn: 0  #要同步过去的群号
-uuid: ""  # 机器人UUID
-message-report-url: "https://pbfpost.xzynb.top"  # 上报地址，一般情况下无需更改
+enable-socket: true  # 是否启用消息同步
 sync-flag-enable: true  #是否启用按字符同步（当玩家发送消息前带指定符号时，同步玩家消息，否则不同步）
 sync-flag: "#"
-async-enable: true  # 是否启用异步请求
+
+# socket设置
+socket-client_id: "123"  # client_id
+socket-client_secret: "123"  # client_secret
+socket-uri: "wss://socket.xzynb.top/ws"  # SocketURI 正常情况下请不要修改
 
 # say指令前缀
 say-prefix: "[Q群消息]"
@@ -24,9 +25,3 @@ login-allow-tick: 600  # 指定tick后还未登录就踢出玩家
 login-allow-tick-msg: "登录已超时，请重新进入"  # 登录超时时提示的消息
 reg-allow-tick: 1200  # 指定tick后还未注册就踢出玩家
 reg-allow-tick-msg: "注册已超时，请重新进入"  # 注册超时时提示的消息
-
-# socket设置
-enable-socket: true  # 是否启用socket通信（见 https://socket.xzy.center）
-socket-client_id: "123"  # client_id
-socket-client_secret: "123"  # client_secret
-socket-uri: "wss://socket.xzynb.top/ws"  # SocketURI 正常情况下请不要修改
