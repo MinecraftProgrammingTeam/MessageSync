@@ -9,7 +9,7 @@ public abstract class ICommand {
     /**
      * 子指令名
      */
-    private String cmdName;
+    private final String cmdName;
 
     /**
      * 子指令参数

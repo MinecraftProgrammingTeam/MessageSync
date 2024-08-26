@@ -34,7 +34,7 @@ public class inventoryEventHandler implements Listener {
 
     private void cleanData(Player p) {
         p.setInvulnerable(false);
-        Main.instance.getLogger().info(Main.gmData.get(p.getName()).toString());
+        Main.instance.getLogger().info(Main.gmData.get(p.getName()));
         p.setGameMode(GameMode.valueOf(Main.gmData.get(p.getName())));
         Main.LoginData.remove(p.getName());
         Main.gmData.remove(p.getName());
@@ -43,7 +43,7 @@ public class inventoryEventHandler implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) throws SQLException {
-        if (event.getWhoClicked() instanceof Player == false) { return;}
+        if (!(event.getWhoClicked() instanceof Player)) { return;}
         Player p = (Player)event.getWhoClicked();
         if (event.getView().getTitle().equalsIgnoreCase(ChatColor.GREEN + "欢迎来到" + plugin.getConfig().getString("server-name") + "服务器 " + ChatColor.BLUE + "请登录") || event.getView().getTitle().equalsIgnoreCase(ChatColor.GREEN + "欢迎来到" + plugin.getConfig().getString("server-name") + "服务器 " + ChatColor.BLUE + "注册（第一遍输入密码，第二遍确认密码）")) {
             List<String> LoginData = Main.LoginData.get(p.getName());
@@ -65,7 +65,7 @@ public class inventoryEventHandler implements Listener {
                             List<String> regData = Main.regData.get(p.getName());
                             String repeatPassword = StringUtils.join(regData, "");
                             if (repeatPassword.equals(password)) {
-                                String ip = null;
+                                String ip;
                                 if (Main.regIpData.containsKey(p.getName())) {
                                     ip = Main.regIpData.get(p.getName());
                                 } else {

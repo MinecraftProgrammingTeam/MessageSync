@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -18,7 +19,7 @@ public class CommandHandler implements TabExecutor {
     /**
      * 维护的指令集合
      */
-    private Map<String, ICommand> commands = new HashMap<>();
+    private final Map<String, ICommand> commands = new HashMap<>();
 
     public Map<String, ICommand> getCommands() {
         return commands;
@@ -65,7 +66,7 @@ public class CommandHandler implements TabExecutor {
 
     /**
      * 手动注册指令
-     * @param command
+     * @param command 指令
      */
     public void registerCommand(ICommand command) {
         //command.setHandler(this);
@@ -74,7 +75,7 @@ public class CommandHandler implements TabExecutor {
 
     /**
      * 使用帮助指令
-     * @param sender
+     * @param sender 发送者
      */
     public void showHelp(CommandSender sender) {
         sender.sendMessage(ChatColor.BLUE + "MessageSync for PBF " + ChatColor.GREEN + "插件帮助");
@@ -85,14 +86,14 @@ public class CommandHandler implements TabExecutor {
 
     /**
      * 统一返回true，使用自定义的showHelp()方法。
-     * @param sender
-     * @param command
-     * @param label
-     * @param args
-     * @return
+     * @param sender 发送者
+     * @param command 指令
+     * @param label 标签
+     * @param args 参数
+     * @return true
      */
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args == null || args.length < 1) {
             showHelp(sender);
             return true;
@@ -108,7 +109,7 @@ public class CommandHandler implements TabExecutor {
                     //用链表的removeFirst，删掉第指令，得到参数
                     LinkedList<String> list = new LinkedList<>(Arrays.asList(args));
                     list.removeFirst();
-                    params = list.toArray(new String[list.size()]);
+                    params = list.toArray(new String[0]);
                 }
                 boolean res = cmd.onCommand(sender, params);
                 if (!res) {
@@ -128,7 +129,7 @@ public class CommandHandler implements TabExecutor {
      * 玩家每输入一个字母都会被服务器响应
      */
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         if (args == null || args.length < 1) {
             showHelp(sender);
             return null;
@@ -139,7 +140,7 @@ public class CommandHandler implements TabExecutor {
         if (args.length == 1) {
             String typingStr = args[0].toLowerCase();
             for (String cmdName : commands.keySet()) {
-                /**
+                /*
                  * 如果正在输入的字母是正确指令的前缀，且玩家拥有对应指令的权限，就将指令名称拼接到结果里去
                  * 注意：这里并不是检测到一个符合就立马返回，而是返回符合前缀的指令集合
                  */
@@ -150,9 +151,9 @@ public class CommandHandler implements TabExecutor {
                     }
                 }
             }
-        } else if (args.length > 1) {
+        } else {
             //获取指令参数
-            String typingStr = args[1].toLowerCase();
+//            String typingStr = args[1].toLowerCase();
             //得到第一个指令，查看对应参数
             ICommand cmd = commands.get(args[0].toLowerCase());
 
@@ -161,7 +162,7 @@ public class CommandHandler implements TabExecutor {
                 String [] params = cmd.getParams().split(" ");
                 if (params.length > args.length-2) {
                     String param = params[args.length - 2];
-                    return Arrays.asList(param);
+                    return Collections.singletonList(param);
                 } else {
                     sender.sendMessage(cmd.showUsage());
                 }

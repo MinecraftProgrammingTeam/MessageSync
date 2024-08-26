@@ -59,9 +59,7 @@ public class SocketClient extends WebSocketClient{
         Main.instance.getLogger().warning(ChatColor.BLUE + "WebSocket收到消息：" + paramString);
         switch (object.getString("type")){
             case "command":
-                Bukkit.getScheduler().runTask(Main.instance, () -> {
-                    Main.instance.getServer().dispatchCommand(Main.instance.getServer().getConsoleSender(), object.getJSONObject("data").getString("cmd"));
-                });
+                Bukkit.getScheduler().runTask(Main.instance, () -> Main.instance.getServer().dispatchCommand(Main.instance.getServer().getConsoleSender(), object.getJSONObject("data").getString("cmd")));
                 break;
 
             case "message":

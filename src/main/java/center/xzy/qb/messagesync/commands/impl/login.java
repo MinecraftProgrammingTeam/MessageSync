@@ -3,6 +3,7 @@ package center.xzy.qb.messagesync.commands.impl;
 import center.xzy.qb.messagesync.Main;
 import center.xzy.qb.messagesync.commands.ICommand;
 import center.xzy.qb.messagesync.events.customEventHandler;
+import center.xzy.qb.messagesync.scheduler.PlayerLogin;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,8 +22,8 @@ public class login extends ICommand {
 
     public boolean onCommand(CommandSender sender, String[] args) {
         if (plugin.getConfig().getBoolean("login-verify")) {
-            String title = null;
-            int timeout = 0;
+            String title;
+            int timeout;
             try{
                 Statement statement = Main.dbConn.createStatement();
                 ResultSet rs = statement.executeQuery("select * from `ms_users` where `id`='" + sender.getName() + "'");
@@ -43,9 +44,9 @@ public class login extends ICommand {
                 throw new RuntimeException(e);
             }
 
-//            PlayerLogin playerLogin = new PlayerLogin();
-//            playerLogin.setPlayer((Player) sender);
-//            playerLogin.runTaskLater(Main.instance, timeout);
+            PlayerLogin playerLogin = new PlayerLogin();
+            playerLogin.setPlayer((Player) sender);
+            playerLogin.runTaskLater(Main.instance, timeout);
             customEventHandler.openInv((Player) sender, title);
         }
         return true;
