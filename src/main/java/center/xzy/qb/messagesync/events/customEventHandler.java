@@ -68,6 +68,9 @@ public class customEventHandler implements Listener {
 
     @EventHandler
     public void PlayerPreLogin(AsyncPlayerPreLoginEvent event) {
+        if (event.getName().startsWith(Objects.requireNonNull(plugin.getConfig().getString("login-ignore-prefix")))) {
+            return;
+        }
         if (Main.regIpData.containsKey(event.getName())){
             Main.regIpData.replace(event.getName(), event.getAddress().toString());
         } else {
@@ -77,6 +80,10 @@ public class customEventHandler implements Listener {
 
     @EventHandler
     public void PlayerLogin(PlayerJoinEvent event) {
+        if (event.getPlayer().getName().startsWith(Objects.requireNonNull(plugin.getConfig().getString("login-ignore-prefix")))) {
+            return;
+        }
+
 //        String Message = "玩家<" + event.getName() + ">已从" + event.getAddress() + "登录服务器";
         sendRequest(event.getJoinMessage());
 
@@ -85,7 +92,7 @@ public class customEventHandler implements Listener {
             int timeout;
             try{
                 Statement statement = Main.dbConn.createStatement();
-                ResultSet rs = statement.executeQuery("select * from `password` where `id`='" + event.getPlayer().getName() + "'");
+                ResultSet rs = statement.executeQuery("select * from `ms_users` where `id`='" + event.getPlayer().getName() + "'");
                 boolean flag = false;
                 while(rs.next()) {
                     flag = true;
@@ -118,16 +125,20 @@ public class customEventHandler implements Listener {
         }
     }
 
+    public static void addPwdBtnItem(Inventory inv, Integer title, Material material){
+        int iter = title==0?1:title;
+        for(int i=0; i<iter; i++){
+            inv.addItem(Main.NewItem(material, title.toString()));
+        }
+    }
+
     public static void openInv(Player player, String title) {
         Inventory inv = Bukkit.createInventory(player, InventoryType.CHEST, title);
 
         inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码1"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "1"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "2"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "2"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "3"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "3"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "3"));
+        addPwdBtnItem(inv, 1, Material.ORANGE_STAINED_GLASS);
+        addPwdBtnItem(inv, 2, Material.ORANGE_STAINED_GLASS);
+        addPwdBtnItem(inv, 3, Material.ORANGE_STAINED_GLASS);
         inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码2"));
         inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码3"));
         inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码7"));
@@ -135,52 +146,19 @@ public class customEventHandler implements Listener {
         inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码5"));
 
         inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码6"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "4"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "4"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "4"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "4"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "5"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "5"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "5"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "5"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "5"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "6"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "0"));
+        addPwdBtnItem(inv, 4, Material.ORANGE_STAINED_GLASS);
+        addPwdBtnItem(inv, 5, Material.ORANGE_STAINED_GLASS);
+        addPwdBtnItem(inv, 6, Material.ORANGE_STAINED_GLASS);
+        addPwdBtnItem(inv, 0, Material.ORANGE_STAINED_GLASS);
         inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码8"));
         inv.addItem(Main.NewItem(Material.GREEN_STAINED_GLASS, "确认"));
         inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码9"));
         inv.addItem(Main.NewItem(Material.RED_STAINED_GLASS, "清空"));
 
         inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码11"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "7"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "8"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
-        inv.addItem(Main.NewItem(Material.ORANGE_STAINED_GLASS, "9"));
+        addPwdBtnItem(inv, 7, Material.ORANGE_STAINED_GLASS);
+        addPwdBtnItem(inv, 8, Material.ORANGE_STAINED_GLASS);
+        addPwdBtnItem(inv, 9, Material.ORANGE_STAINED_GLASS);
         inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码12"));
         inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码13"));
         inv.addItem(Main.NewItem(Material.WHITE_STAINED_GLASS, "请输入密码10"));
