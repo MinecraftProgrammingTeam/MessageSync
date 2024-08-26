@@ -42,17 +42,19 @@ public class CommandHandler implements TabExecutor {
      * 注意要使用小写，与发送者的指令进行匹配
      */
     private void initHandler() {
-//        Reflections reflections = new Reflections("center.xzy.qb.messagesync.commands.impl");
-//        Set<Class<? extends ICommand>> subTypesOf = reflections.getSubTypesOf(ICommand.class);
-////        Main.instance.getLogger().warning(subTypesOf.toArray().toString());
-//        subTypesOf.forEach(aClass -> {
-//            try {
-//                ICommand command = aClass.newInstance();
-//                registerCommand(command);
-//            } catch (InstantiationException | IllegalAccessException e) {
-//                throw new RuntimeException(e);
-//            }
-//        });
+        /*
+        Reflections reflections = new Reflections("center.xzy.qb.messagesync.commands.impl");
+        Set<Class<? extends ICommand>> subTypesOf = reflections.getSubTypesOf(ICommand.class);
+//        Main.instance.getLogger().warning(subTypesOf.toArray().toString());
+        subTypesOf.forEach(aClass -> {
+            try {
+                ICommand command = aClass.newInstance();
+                registerCommand(command);
+            } catch (InstantiationException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        */
 
         registerCommand(new enable());
         registerCommand(new disable());
