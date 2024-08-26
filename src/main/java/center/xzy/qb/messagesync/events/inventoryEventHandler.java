@@ -1,5 +1,6 @@
 package center.xzy.qb.messagesync.events;
 
+import center.xzy.qb.messagesync.Main;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -7,7 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.plugin.Plugin;
-import center.xzy.qb.messagesync.Main;
 import org.sqlite.util.StringUtils;
 
 import java.sql.ResultSet;
@@ -51,7 +51,7 @@ public class inventoryEventHandler implements Listener {
                 case 15:
                     // 确认
                     Statement statement = Main.dbConn.createStatement();
-                    ResultSet rs = statement.executeQuery("select * from `password` where `id`='" + p.getName() + "'");
+                    ResultSet rs = statement.executeQuery("select * from `ms_users` where `id`='" + p.getName() + "'");
                     boolean flag = false;
                     String currentPassword = null;
                     String password = StringUtils.join(LoginData, "");
@@ -74,7 +74,7 @@ public class inventoryEventHandler implements Listener {
                                     return ;
                                 }
 
-                                rs = statement.executeQuery("select * from `password` where `ip`='" + ip + "'");
+                                rs = statement.executeQuery("select * from `ms_users` where `ip`='" + ip + "'");
                                 int ipCount = 0;
                                 while(rs.next()) {
                                     ipCount++;
@@ -90,7 +90,7 @@ public class inventoryEventHandler implements Listener {
                                 Date date = new Date();
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                                 String dateString = sdf.format(date);
-                                statement.executeUpdate("insert into password values('" + p.getName() + "', '" + Main.MD5(password) + "', '" + dateString + "', '" + ip + "')");
+                                statement.executeUpdate("insert into `ms_users` values('" + p.getName() + "', '" + Main.MD5(password) + "', '" + dateString + "', '" + ip + "')");
                                 cleanData(p);
                                 p.closeInventory();
                                 p.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("reg-success-msg"));

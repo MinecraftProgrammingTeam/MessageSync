@@ -1,13 +1,12 @@
 package center.xzy.qb.messagesync.commands.impl;
 
 import center.xzy.qb.messagesync.Main;
-import center.xzy.qb.messagesync.scheduler.PlayerLogin;
+import center.xzy.qb.messagesync.commands.ICommand;
+import center.xzy.qb.messagesync.events.customEventHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import center.xzy.qb.messagesync.commands.ICommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import center.xzy.qb.messagesync.events.customEventHandler;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,7 +25,7 @@ public class login extends ICommand {
             int timeout = 0;
             try{
                 Statement statement = Main.dbConn.createStatement();
-                ResultSet rs = statement.executeQuery("select * from `password` where `id`='" + sender.getName() + "'");
+                ResultSet rs = statement.executeQuery("select * from `ms_users` where `id`='" + sender.getName() + "'");
                 boolean flag = false;
                 while(rs.next()) {
                     flag = true;
