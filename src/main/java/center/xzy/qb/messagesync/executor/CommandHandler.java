@@ -55,7 +55,9 @@ public class CommandHandler implements TabExecutor {
 
         registerCommand(new enable());
         registerCommand(new disable());
-        registerCommand(new user());
+        registerCommand(new useradd());
+        registerCommand(new userdel());
+        registerCommand(new userlist());
         registerCommand(new login());
         registerCommand(new reload());
         registerCommand(new reconnect());

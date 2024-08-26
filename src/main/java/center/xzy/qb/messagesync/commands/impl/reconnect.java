@@ -25,6 +25,6 @@ public class reconnect extends ICommand {
     }
 
     public String permission(){
-        return "messagesync.ms.disable";
+        return "messagesync.ms.reconnect";
     }
 }
