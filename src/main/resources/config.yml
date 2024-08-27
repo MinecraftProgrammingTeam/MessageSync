@@ -22,8 +22,8 @@ login-fail-msg: "密码错误！"  # 登录失败时提示
 reg-success-msg: "注册成功！"  # 注册成功时提示
 reg-ip-count: 1  # 每个IP允许注册的账号数，0为不限制
 reg-ip-max-fail-msg: "当前IP注册ID数量已达上限！"  # 当IP注册数量超的时候提示的内容
-login-allow-tick: 600  # 指定tick后还未登录就踢出玩家
+login-allow-tick: 600  # 指定tick后还未登录就踢出玩家（设置为0不会超时）
 login-allow-tick-msg: "登录已超时，请重新进入"  # 登录超时时提示的消息
-reg-allow-tick: 1200  # 指定tick后还未注册就踢出玩家
+reg-allow-tick: 1200  # 指定tick后还未注册就踢出玩家（设置为0则不会超时）
 reg-allow-tick-msg: "注册已超时，请重新进入"  # 注册超时时提示的消息
 login-ignore-prefix: "bot_"  # 需要忽略的前缀（可用于假人）请注意这也会忽略相应玩家的进服消息同步

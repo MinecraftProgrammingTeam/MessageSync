@@ -44,9 +44,11 @@ public class login extends ICommand {
                 throw new RuntimeException(e);
             }
 
-            PlayerLogin playerLogin = new PlayerLogin();
-            playerLogin.setPlayer((Player) sender);
-            playerLogin.runTaskLater(Main.instance, timeout);
+            if (timeout != 0) {
+                PlayerLogin playerLogin = new PlayerLogin();
+                playerLogin.setPlayer((Player) sender);
+                playerLogin.runTaskLater(Main.instance, timeout);
+            }
             customEventHandler.openInv((Player) sender, title);
         }
         return true;
