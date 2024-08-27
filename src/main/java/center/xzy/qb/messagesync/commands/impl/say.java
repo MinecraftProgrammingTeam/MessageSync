@@ -1,18 +1,18 @@
-package center.xzy.qb.messagesync.executor;
+package center.xzy.qb.messagesync.commands.impl;
 
 import center.xzy.qb.messagesync.Main;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
+import center.xzy.qb.messagesync.commands.ICommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 
-public class sayHandler implements CommandExecutor {
+public class say extends ICommand {
+    public say(){
+        super("say", "<内容>", "说");
+    }
     Plugin plugin = Main.getPlugin(Main.class);
 
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(CommandSender sender, String[] args) {
         StringBuilder msg = new StringBuilder();
         for (String arg : args) {
             msg.append(arg).append(" ");
@@ -23,5 +23,9 @@ public class sayHandler implements CommandExecutor {
             Main.instance.getServer().broadcastMessage(plugin.getConfig().getString("say-prefix") + " " + msg);
         }
         return true;
+    }
+
+    public String permission(){
+        return "messagesync.ms.say";
     }
 }

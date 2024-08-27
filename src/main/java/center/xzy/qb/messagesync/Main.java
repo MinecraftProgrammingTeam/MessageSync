@@ -3,7 +3,6 @@ package center.xzy.qb.messagesync;
 import center.xzy.qb.messagesync.events.customEventHandler;
 import center.xzy.qb.messagesync.events.inventoryEventHandler;
 import center.xzy.qb.messagesync.executor.CommandHandler;
-import center.xzy.qb.messagesync.executor.sayHandler;
 import center.xzy.qb.messagesync.socket.SocketClient;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -49,7 +48,6 @@ public final class Main extends JavaPlugin {
 
         // reg commands
         Objects.requireNonNull(getCommand("ms")).setExecutor(new CommandHandler());
-        Objects.requireNonNull(getCommand("say")).setExecutor(new sayHandler());
 
         // register events
         getServer().getPluginManager().registerEvents(new customEventHandler(), this);

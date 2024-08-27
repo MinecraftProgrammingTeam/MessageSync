@@ -4,8 +4,8 @@ main: center.xzy.qb.messagesync.Main
 api-version: 1.13
 authors: [xzyStudio]
 soft-depend: [TitleManager]
-description: Message Sync Plugin for PigBotFramework
-website: https://qb.xzy.center
+description: Awesome Toolkit Plugin
+website: https://xzynb.top
 commands:
   ms:
     description: MessageSync消息同步相关指令
@@ -14,6 +14,12 @@ commands:
     description: 发送消息
     usage: /say <MessageContent>
 permissions:
+  messagesync.ms.say:
+    description: Say Command
+    default: true
+  messagesync.ms.login:
+    description: Login Command
+    default: true
   messagesync.ms.*:
-    description: Allows ms command
+    description: All ms command
     default: op
